@@ -1,6 +1,9 @@
 import React from 'react'
 import * as BooksAPI from '../BooksAPI'
 import Book from './Book'
+import {
+  Link
+} from "react-router-dom";
 class SearchPage extends React.Component{
    constructor(props) {
     super(props);
@@ -12,27 +15,27 @@ class SearchPage extends React.Component{
     this.setState({query: event.target.value});  
     //console.log(event.target.value)
     let resp=[];
-    
+    if(event.target.value){
       try{	
       	resp = await BooksAPI.search(event.target.value);
-      console.log(resp);
         this.setState({queriedBooks:resp});
     }catch(error){
        console.error(error);
        }
-    
+      }
       
     
   }
 
   
   render(){
-   
-    //console.log("render the serach page.")
+   console.log(this.state.queriedBooks)
     return(
               <div className="search-books">
             <div className="search-books-bar">
-              <a className="close-search" onClick={() => this.props.searchPageState.setState({ showSearchPage: false })}>Close</a>
+            <Link to="/">
+              <button className="close-search">Close</button>
+            </Link>
               <div className="search-books-input-wrapper">
                 {/*
                   NOTES: The search from BooksAPI is limited to a particular set of search terms.
@@ -47,9 +50,9 @@ class SearchPage extends React.Component{
             </div>
             <div className="search-books-results">
               <ol className="books-grid">
-{this.state.queriedBooks.map((book) =>( 
-  					  <Book key={book.id} book={book} shelfFunc={this.props.shelfFunc}/>
-  					  ))}
+{(this.state.queriedBooks!==undefined)?this.state.queriedBooks.map((book)=>( 
+  					  <Book key={book.id} book={book} shelfFunc={this.props.shelfFunc}/>)
+              ):<li>No Books Found</li>}
                       </ol>
             </div>
           </div>

@@ -36,7 +36,7 @@ class BooksApp extends React.Component {
     //console.log("booksFullList after map = >"+this.state.booksFullList)\
     try {
       await BooksAPI.update(bk, targetShelf);
-      console.log(bk, targetShelf)
+     // console.log(bk, targetShelf)
     } catch (error) {
       console.error(error);
     }
@@ -54,9 +54,9 @@ class BooksApp extends React.Component {
    this.setState({queriedBooks:resp});
  }*/
   render() {
-    console.log('App.js render')
+    //console.log('App.js render')
     const books = this.state.booksFullList;
-    console.log(books)
+    //console.log(books)
     /*let currentlyReadingBooks;
     let wantToReadBooks ;
     let readBooks ;*/
@@ -64,7 +64,7 @@ class BooksApp extends React.Component {
       const currentlyReadingBooks = books.filter(book => book.shelf === "currentlyReading");
       const wantToReadBooks = books.filter(book => book.shelf === "wantToRead");
       const readBooks = books.filter(book => book.shelf === "read");
-      console.log(books, currentlyReadingBooks, wantToReadBooks, readBooks);
+      //console.log(books, currentlyReadingBooks, wantToReadBooks, readBooks);
       return (
         <Router>
          
@@ -78,7 +78,9 @@ class BooksApp extends React.Component {
                   <PageTitle />
                   <Shelves shelfFunc={this.updateShelf} currentlyReadingBooks={currentlyReadingBooks} wantToReadBooks={wantToReadBooks} readBooks={readBooks} />
                   <div className="open-search">
-                    <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
+                    <Link to="/search">
+                      <button>Add a book</button>
+                    </Link>
                   </div>
                 </div>
               </Route>
@@ -93,7 +95,7 @@ class BooksApp extends React.Component {
           <div className="list-books">
             <PageTitle />
             <div className="open-search">
-              <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
+              <button>Add a book</button>
             </div>
           </div>)
         
@@ -106,7 +108,7 @@ class BooksApp extends React.Component {
     let resp;
     try {
       resp = await BooksAPI.getAll();
-      console.log(resp)
+      //console.log(resp)
       this.setState({ booksFullList: resp });
       console.log(this.state.booksFullList)
     } catch (error) {
