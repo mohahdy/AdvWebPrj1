@@ -28,43 +28,30 @@ class BooksApp extends React.Component {
     //console.log(`bk = > ${bk.title}   targetShelf = > ${targetShelf}`)
     this.setState({
       booksFullList: this.state.booksFullList.map(book => {
-        bk.id === book.id ? book.shelf = targetShelf : book.shelf = book.shelf;
+        if(bk.id === book.id) book.shelf = targetShelf;
         return book;
       }
       )
     });
-    //console.log("booksFullList after map = >"+this.state.booksFullList)\
+
+    console.log("booksFullList after map = >",this.state.booksFullList);
     try {
       await BooksAPI.update(bk, targetShelf);
-     // console.log(bk, targetShelf)
+     //console.log(bk, targetShelf)
     } catch (error) {
       console.error(error);
     }
   }
 
-  /*updateSerachPage = async(query)=>{
-    let resp;
-   this.setState({query});
-    try{
-     resp = await BooksAPI.search(query);
-    }catch(error){
-    console.error(error);
-    }
- 
-   this.setState({queriedBooks:resp});
- }*/
+  
   render() {
-    //console.log('App.js render')
     const books = this.state.booksFullList;
-    //console.log(books)
-    /*let currentlyReadingBooks;
-    let wantToReadBooks ;
-    let readBooks ;*/
+   
     if (books != null) {
       const currentlyReadingBooks = books.filter(book => book.shelf === "currentlyReading");
       const wantToReadBooks = books.filter(book => book.shelf === "wantToRead");
       const readBooks = books.filter(book => book.shelf === "read");
-      //console.log(books, currentlyReadingBooks, wantToReadBooks, readBooks);
+      //console.log(currentlyReadingBooks,wantToReadBooks,readBooks)
       return (
         <Router>
          
@@ -110,7 +97,7 @@ class BooksApp extends React.Component {
       resp = await BooksAPI.getAll();
       //console.log(resp)
       this.setState({ booksFullList: resp });
-      console.log(this.state.booksFullList)
+      //console.log(this.state.booksFullList)
     } catch (error) {
       console.error(error);
     }

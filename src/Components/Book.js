@@ -8,12 +8,12 @@ class Book extends React.Component{
     //console.log(`this.state.value ${this.state.value}`);
   }
   handleChange(book,event) {    
-    //console.log(event.target.value);
+    //console.log(book,event.target.value);
     this.setState({value: event.target.value});  
     this.props.shelfFunc(book,event.target.value)                     
                          }
 render(){
- // console.log(`inside Book Component this.props.book is ${JSON.stringify(this.props.book)}`)
+ //console.log(`inside Book Component this.props.book is ${JSON.stringify(this.props.book)}`)
   const id=this.props.book.id;
   return(
    
