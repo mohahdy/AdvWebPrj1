@@ -1,9 +1,9 @@
 import React from 'react'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
-import PageTitle from './Components/PageTitle.js'
-import SearchPage from'./Components/SearchPage'
-import Shelves from'./Components/Shelves'
+import PageTitle from './Components/PageTitle'
+import SearchPage from './Components/SearchPage'
+import Shelves from './Components/Shelves'
 import {
   BrowserRouter as Router,
   Switch,
@@ -22,97 +22,99 @@ class BooksApp extends React.Component {
     showSearchPage: false,
     booksFullList: [],
     query: '',
-    
+
   };
-	updateShelf = async(bk,targetShelf)=>{
+  updateShelf = async (bk, targetShelf) => {
     //console.log(`bk = > ${bk.title}   targetShelf = > ${targetShelf}`)
-    	this.setState({booksFullList:this.state.booksFullList.map(book=>{
-          bk.id===book.id?book.shelf=targetShelf:book.shelf=book.shelf;
-         return book;
-        }
-                                                                 )});
-          //console.log("booksFullList after map = >"+this.state.booksFullList)\
-      try{
-		await BooksAPI.update(bk,targetShelf);
-        console.log(bk,targetShelf)
-      }catch(error){
-        console.error(error);
+    this.setState({
+      booksFullList: this.state.booksFullList.map(book => {
+        bk.id === book.id ? book.shelf = targetShelf : book.shelf = book.shelf;
+        return book;
       }
+      )
+    });
+    //console.log("booksFullList after map = >"+this.state.booksFullList)\
+    try {
+      await BooksAPI.update(bk, targetShelf);
+      console.log(bk, targetShelf)
+    } catch (error) {
+      console.error(error);
     }
-  
-  	 /*pdateSerachPage = async(query)=>{
-       let resp;
-      this.setState({query});
-       try{
-      	resp = await BooksAPI.search(query);
-       }catch(error){
-       console.error(error);
-       }
-    
-      this.setState({queriedBooks:resp});
-    }*/
+  }
+
+  /*updateSerachPage = async(query)=>{
+    let resp;
+   this.setState({query});
+    try{
+     resp = await BooksAPI.search(query);
+    }catch(error){
+    console.error(error);
+    }
+ 
+   this.setState({queriedBooks:resp});
+ }*/
   render() {
     console.log('App.js render')
     const books = this.state.booksFullList;
     console.log(books)
-  	/*let currentlyReadingBooks;
-  	let wantToReadBooks ;
-  	let readBooks ;*/
-    if(books!=null)
-    {
-      const currentlyReadingBooks = books.filter(book => book.shelf==="currentlyReading");
-      const wantToReadBooks = books.filter(book => book.shelf==="wantToRead");
-      const readBooks = books.filter(book => book.shelf==="read");
-      console.log(books,currentlyReadingBooks,wantToReadBooks,readBooks);
+    /*let currentlyReadingBooks;
+    let wantToReadBooks ;
+    let readBooks ;*/
+    if (books != null) {
+      const currentlyReadingBooks = books.filter(book => book.shelf === "currentlyReading");
+      const wantToReadBooks = books.filter(book => book.shelf === "wantToRead");
+      const readBooks = books.filter(book => book.shelf === "read");
+      console.log(books, currentlyReadingBooks, wantToReadBooks, readBooks);
       return (
-      <Router>
-      <Switch>
-      <div className="app">
-        <Route path="/search">
-        <SearchPage searchPageState={this} shelfFunc={this.updateShelf} booksFullList={this.state.booksFullList}/> 
-      	</Route>
-    	<Route path="/">
-         <div className="list-books">
-            <PageTitle/>
-            <Shelves shelfFunc={this.updateShelf} currentlyReadingBooks={currentlyReadingBooks} wantToReadBooks={wantToReadBooks} readBooks={readBooks}/>
-            <div className="open-search">
-              <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
+        <Router>
+         
+            <div className="app">
+            <Switch>
+              <Route path="/search">
+                <SearchPage searchPageState={this} shelfFunc={this.updateShelf} booksFullList={this.state.booksFullList} />
+              </Route>
+              <Route exact path="/">
+                <div className="list-books">
+                  <PageTitle />
+                  <Shelves shelfFunc={this.updateShelf} currentlyReadingBooks={currentlyReadingBooks} wantToReadBooks={wantToReadBooks} readBooks={readBooks} />
+                  <div className="open-search">
+                    <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
+                  </div>
+                </div>
+              </Route>
+              </Switch>
             </div>
-          </div>
-		</Route>
-        }
-      </div>
-	  </Switch>
- 	  </Router>
-    )
-    }else{
-    return (
-      <div className="app">
-        <div className="list-books">
-            <PageTitle/>
+          
+        </Router>
+      )
+    } else {
+      return (
+        <div className="app">
+          <div className="list-books">
+            <PageTitle />
             <div className="open-search">
               <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
             </div>
           </div>)
-        }
-      </div>
-		)
+        
+        </div>
+      )
     }
-    
+
   }
-  async componentDidMount (){
-let resp;
+  async componentDidMount() {
+    let resp;
     try {
-  resp = await BooksAPI.getAll();
-console.log(resp)
-this.setState({booksFullList:resp});
-console.log(this.state.booksFullList)
-} catch (error) {
-  console.error(error);
-}
-    
-	
-}
+      resp = await BooksAPI.getAll();
+      console.log(resp)
+      this.setState({ booksFullList: resp });
+      console.log(this.state.booksFullList)
+    } catch (error) {
+      console.error(error);
+    }
+
+
+  }
 }
 
 export default BooksApp;
