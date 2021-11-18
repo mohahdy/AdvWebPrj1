@@ -24,6 +24,8 @@ class BooksApp extends React.Component {
     query: '',
 
   };
+  bookIndexByID = (bookID)=>(this.state.booksFullList.find(({id})=>id === bookID))
+  
   updateShelf = async (bk, targetShelf) => {
     //console.log(`bk = > ${bk.title}   targetShelf = > ${targetShelf}`)
     this.setState({
@@ -33,6 +35,13 @@ class BooksApp extends React.Component {
       }
       )
     });
+    const bookIndex = this.bookIndexByID(bk.id)
+    if(!bookIndex){ 
+      console.log(bk," pushed")
+      //this.state.booksFullList.push(bk);
+      this.setState({ booksFullList: [...this.state.booksFullList, bk] }) //simple value
+      console.log()
+    }
 
     console.log("booksFullList after map = >",this.state.booksFullList);
     try {
