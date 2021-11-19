@@ -1,6 +1,7 @@
 import React from 'react'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
+import ErrorHandler from './Components/ErrorHandler';  
 import PageTitle from './Components/PageTitle'
 import SearchPage from './Components/SearchPage'
 import Shelves from './Components/Shelves'
@@ -86,6 +87,7 @@ class BooksApp extends React.Component {
       )
     } else {
       return (
+        <ErrorHandler>
         <div className="app">
           <div className="list-books">
             <PageTitle />
@@ -95,6 +97,7 @@ class BooksApp extends React.Component {
           </div>)
         
         </div>
+        </ErrorHandler>
       )
     }
 

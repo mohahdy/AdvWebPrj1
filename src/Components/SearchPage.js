@@ -13,7 +13,7 @@ class SearchPage extends React.Component{
 
   async handleChange(event) {
     this.setState({query: event.target.value});  
-    //console.log(event.target.value)
+    console.log(event.target.value)
     let resp=[];
     if(event.target.value){
       try{	
@@ -23,13 +23,16 @@ class SearchPage extends React.Component{
        console.error(error);
        }
       }
+      else{
+        this.setState({queriedBooks:[]});
+      }
       
     
   }
 
   
   render(){
-   //console.log(this.state.queriedBooks)
+   console.log(this.state.queriedBooks)
     return(
               <div className="search-books">
             <div className="search-books-bar">
@@ -48,13 +51,16 @@ class SearchPage extends React.Component{
                 <input type="text" placeholder="Search by title or author" onChange={(e)=>this.handleChange(e)}/>
               </div>
             </div>
+            
             <div className="search-books-results">
               <ol className="books-grid">
-{(this.state.queriedBooks!==undefined)?this.state.queriedBooks.map((book)=>( 
+              
+              {(Array.isArray(this.state.queriedBooks))?this.state.queriedBooks.map((book)=>( 
   					  <Book key={book.id} book={book} shelfFunc={this.props.shelfFunc}/>)
               ):<li>No Books Found</li>}
                       </ol>
             </div>
+            
           </div>
     )
     
