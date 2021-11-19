@@ -5,15 +5,12 @@ class Book extends React.Component{
     super(props);
     this.props.book.shelf?this.state = {value:this.props.book.shelf}:this.state={value:"none"};
     this.handleChange = this.handleChange.bind(this);
-    //console.log(`this.state.value ${this.state.value}`);
   }
   handleChange(book,event) {    
-    //console.log(book,event.target.value);
     this.setState({value: event.target.value});  
     this.props.shelfFunc(book,event.target.value)                     
                          }
 render(){
- //console.log(`inside Book Component this.props.book is ${JSON.stringify(this.props.book)}`)
   const id=this.props.book.id;
   const thumbnail = (this.props.book.imageLinks!==undefined)?this.props.book.imageLinks.thumbnail:"";
   return(

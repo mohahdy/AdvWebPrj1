@@ -28,10 +28,8 @@ class BooksApp extends React.Component {
   bookIndexByID = (bookID)=>(this.state.booksFullList.find(({id})=>id === bookID))
   cleanBooksList(){
     this.setState({ booksFullList: this.state.booksFullList.filter(book=>book.shelf!=="none") });
-    //console.log("inside cleanBooksList:",this.state.booksFullList.filter(book=>book.shelf==="none"));
   }
   updateShelf = async (bk, targetShelf) => {
-    //console.log(`bk = > ${bk.title}   targetShelf = > ${targetShelf}`)
     this.setState({
       booksFullList: this.state.booksFullList.map(book => {
         if(bk.id === book.id) book.shelf = targetShelf;
@@ -49,9 +47,6 @@ class BooksApp extends React.Component {
 
     try {
       await BooksAPI.update(bk, targetShelf);
-     console.log(bk, targetShelf)
-      const resp = await BooksAPI.search("web");
-      console.log("returned Book", resp);
     } catch (error) {
       console.error(error);
     }
@@ -65,7 +60,6 @@ class BooksApp extends React.Component {
       const currentlyReadingBooks = books.filter(book => book.shelf === "currentlyReading");
       const wantToReadBooks = books.filter(book => book.shelf === "wantToRead");
       const readBooks = books.filter(book => book.shelf === "read");
-      //console.log(currentlyReadingBooks,wantToReadBooks,readBooks)
       return (
         <Router>
          
@@ -111,18 +105,14 @@ class BooksApp extends React.Component {
     let resp;
     try {
       resp = await BooksAPI.getAll();
-      //console.log(resp)
       this.setState({ booksFullList: resp });
-      //console.log(this.state.booksFullList)
     } catch (error) {
       console.error(error);
     }
 
 
   }
-  async componentDidUpdate(){
-    //console.log(this.state.booksFullList);
-  }
+  
 }
 
 export default BooksApp;

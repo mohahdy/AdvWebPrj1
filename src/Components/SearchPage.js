@@ -14,14 +14,12 @@ class SearchPage extends React.Component{
   updateShelfProp(resp){
     this.props.books.forEach(book => {
       const existingBookIndex = resp.findIndex((bk)=>bk.id===book.id)
-      console.log("existing Book is:", existingBookIndex)
       if(resp[existingBookIndex]) resp[existingBookIndex].shelf = book.shelf;
     });
     return resp;
   }
   async handleChange(event) {
     this.setState({query: event.target.value});  
-    console.log(event.target.value)
     let resp=[];
     if(event.target.value){
       try{	
@@ -73,9 +71,6 @@ class SearchPage extends React.Component{
     )
     
   }
-  componentDidUpdate()
-  {
-       console.log(this.state.queriedBooks);
-  }
+  
 }
 export default SearchPage;
