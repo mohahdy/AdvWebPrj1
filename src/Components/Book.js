@@ -3,9 +3,9 @@ import React from 'react';
 class Book extends React.Component{
   constructor(props) {
     super(props);
-    this.props.book.shelf?this.state = {value:this.props.book.shelf}:this.state={value:"none"};
     this.handleChange = this.handleChange.bind(this);
   }
+  state = {value:"none"}
   handleChange(book,event) {    
     this.setState({value: event.target.value});  
     this.props.shelfFunc(book,event.target.value)                     
@@ -35,7 +35,9 @@ render(){
                       </li>);
                       }
                       
-  
+  componentDidMount(){
+   this.props.book.shelf?this.setState({value:this.props.book.shelf}):this.setState({value:"none"});
+                        }
 }
 
 export default Book;
