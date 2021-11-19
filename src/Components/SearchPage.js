@@ -7,10 +7,18 @@ import {
 class SearchPage extends React.Component{
    constructor(props) {
     super(props);
-    this.state = {query: '',queriedBooks:[]};
+    
     this.handleChange = this.handleChange.bind(this);
   }
-
+  state = {query: '',queriedBooks:[]};
+  updateShelfProp(resp){
+    this.props.books.forEach(book => {
+      const existingBookIndex = resp.findIndex((bk)=>bk.id===book.id)
+      console.log("existing Book is:", existingBookIndex)
+      if(resp[existingBookIndex]) resp[existingBookIndex].shelf = book.shelf;
+    });
+    return resp;
+  }
   async handleChange(event) {
     this.setState({query: event.target.value});  
     console.log(event.target.value)
@@ -18,6 +26,7 @@ class SearchPage extends React.Component{
     if(event.target.value){
       try{	
       	resp = await BooksAPI.search(event.target.value);
+        if (Array.isArray(resp) && resp.length>0) {resp = this.updateShelfProp(resp);}
         this.setState({queriedBooks:resp});
     }catch(error){
        console.error(error);
@@ -32,7 +41,6 @@ class SearchPage extends React.Component{
 
   
   render(){
-   console.log(this.state.queriedBooks)
     return(
               <div className="search-books">
             <div className="search-books-bar">
@@ -64,6 +72,10 @@ class SearchPage extends React.Component{
           </div>
     )
     
+  }
+  componentDidUpdate()
+  {
+       console.log(this.state.queriedBooks);
   }
 }
 export default SearchPage;

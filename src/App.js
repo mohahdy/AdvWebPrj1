@@ -26,7 +26,10 @@ class BooksApp extends React.Component {
 
   };
   bookIndexByID = (bookID)=>(this.state.booksFullList.find(({id})=>id === bookID))
-  
+  cleanBooksList(){
+    this.setState({ booksFullList: this.state.booksFullList.filter(book=>book.shelf!=="none") });
+    //console.log("inside cleanBooksList:",this.state.booksFullList.filter(book=>book.shelf==="none"));
+  }
   updateShelf = async (bk, targetShelf) => {
     //console.log(`bk = > ${bk.title}   targetShelf = > ${targetShelf}`)
     this.setState({
@@ -35,18 +38,20 @@ class BooksApp extends React.Component {
         return book;
       }
       )
-    });
+    },this.cleanBooksList);
     const bookIndex = this.bookIndexByID(bk.id)
     if(bookIndex===undefined){ 
       bk.shelf = targetShelf;
-      this.setState({ booksFullList: [...this.state.booksFullList, bk] });
-      this.setState();
+      this.setState({ booksFullList: [...this.state.booksFullList, bk] }, this.cleanBooksList);
+
      // this.setState({ booksFullList: [...this.state.booksFullList, bk] }) //simple value
     }
 
     try {
       await BooksAPI.update(bk, targetShelf);
-     //console.log(bk, targetShelf)
+     console.log(bk, targetShelf)
+      const resp = await BooksAPI.search("web");
+      console.log("returned Book", resp);
     } catch (error) {
       console.error(error);
     }
@@ -55,7 +60,7 @@ class BooksApp extends React.Component {
   
   render() {
     const books = this.state.booksFullList;
-   
+
     if (books != null) {
       const currentlyReadingBooks = books.filter(book => book.shelf === "currentlyReading");
       const wantToReadBooks = books.filter(book => book.shelf === "wantToRead");
@@ -67,7 +72,7 @@ class BooksApp extends React.Component {
             <div className="app">
             <Switch>
               <Route path="/search">
-                <SearchPage searchPageState={this} shelfFunc={this.updateShelf} booksFullList={this.state.booksFullList} />
+                <SearchPage shelfFunc={this.updateShelf} books={this.state.booksFullList}/>
               </Route>
               <Route exact path="/">
                 <div className="list-books">
@@ -100,8 +105,8 @@ class BooksApp extends React.Component {
         </ErrorHandler>
       )
     }
-
   }
+
   async componentDidMount() {
     let resp;
     try {
@@ -114,6 +119,9 @@ class BooksApp extends React.Component {
     }
 
 
+  }
+  async componentDidUpdate(){
+    //console.log(this.state.booksFullList);
   }
 }
 
